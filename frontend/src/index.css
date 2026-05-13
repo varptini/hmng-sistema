@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 173 80% 40%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 40% 94%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 94%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+    --radius: 0.625rem;
+    --sidebar: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-accent: 221 83% 53%;
+    --sidebar-border: 222 47% 18%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  
+  ::-webkit-scrollbar { @apply w-1.5 h-1.5; }
+  ::-webkit-scrollbar-track { @apply bg-muted/50; }
+  ::-webkit-scrollbar-thumb { @apply bg-muted-foreground/30 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground/50; }
+}
+
+@layer components {
+  .stat-card {
+    @apply bg-card rounded-xl border p-5 shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  .page-header {
+    @apply mb-6 flex items-center justify-between;
+  }
+  
+  .badge-vigente { @apply bg-emerald-100 text-emerald-700 border-emerald-200; }
+  .badge-por-caducar { @apply bg-amber-100 text-amber-700 border-amber-200; }
+  .badge-caducado { @apply bg-red-100 text-red-700 border-red-200; }
+  .badge-stock-bajo { @apply bg-orange-100 text-orange-700 border-orange-200; }
+  .badge-agotado { @apply bg-red-100 text-red-700 border-red-200; }
+  .badge-normal { @apply bg-emerald-100 text-emerald-700 border-emerald-200; }
+  
+  .badge-pendiente { @apply bg-amber-100 text-amber-700; }
+  .badge-atendido { @apply bg-emerald-100 text-emerald-700; }
+  .badge-cancelado { @apply bg-gray-100 text-gray-600; }
+  .badge-enviado { @apply bg-blue-100 text-blue-700; }
+  .badge-recibido { @apply bg-emerald-100 text-emerald-700; }
+}
