@@ -1,0 +1,73 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hmng_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hmng_user
+      POSTGRES_PASSWORD: hmng_pass_2025
+      POSTGRES_DB: hmng_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - hmng_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hmng_user -d hmng_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hmng_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://hmng_user:hmng_pass_2025@postgres:5432/hmng_db
+      JWT_SECRET: hmng_super_secret_jwt_2025_change_in_production
+      JWT_EXPIRES_IN: 8h
+      PORT: 4000
+      NODE_ENV: development
+      FRONTEND_URL: http://192.168.0.4:5173
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - hmng_network
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hmng_frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: http://192.168.0.4:4000/api
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - hmng_network
+    command: npm run dev -- --host
+
+volumes:
+  postgres_data:
+
+networks:
+  hmng_network:
+    driver: bridge
