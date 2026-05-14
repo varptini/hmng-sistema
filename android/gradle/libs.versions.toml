@@ -17,6 +17,7 @@ coroutines = "1.8.1"
 lifecycle = "2.8.2"
 kotlinx-serialization = "1.7.0"
 biometric = "1.2.0-alpha05"
+paging = "3.3.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -94,6 +95,10 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 # Core Android
 core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
+
+# Paging 3
+paging-runtime = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 
 # Test
 junit = { group = "junit", name = "junit", version = "4.13.2" }

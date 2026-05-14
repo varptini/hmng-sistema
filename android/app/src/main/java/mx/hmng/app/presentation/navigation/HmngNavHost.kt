@@ -9,10 +9,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import mx.hmng.app.presentation.bitacora.BitacoraScreen
 import mx.hmng.app.presentation.components.AppScaffold
 import mx.hmng.app.presentation.dashboard.DashboardScreen
 import mx.hmng.app.presentation.insumos.AlertasScreen
 import mx.hmng.app.presentation.insumos.InsumosScreen
+import mx.hmng.app.presentation.pedidos.PedidosAlmacenScreen
+import mx.hmng.app.presentation.pedidos.PedidosSubalmacenScreen
 
 @Composable
 fun HmngNavHost() {
@@ -45,13 +48,13 @@ fun HmngNavHost() {
                 Text("Pantalla Entradas")
             }
             composable(NavRoutes.PedidosSubalmacen.route) {
-                Text("Pantalla Pedidos Subalmacén")
+                PedidosSubalmacenScreen()
             }
             composable(NavRoutes.PedidosAlmacen.route) {
-                Text("Pantalla Pedidos Almacén")
+                PedidosAlmacenScreen()
             }
             composable(NavRoutes.Bitacora.route) {
-                Text("Pantalla Bitácora")
+                BitacoraScreen()
             }
             composable(NavRoutes.Notificaciones.route) {
                 Text("Pantalla Notificaciones")

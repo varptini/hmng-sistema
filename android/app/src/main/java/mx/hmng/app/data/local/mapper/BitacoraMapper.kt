@@ -29,3 +29,16 @@ fun BitacoraEntity.toDomain(): BitacoraMovimiento = BitacoraMovimiento(
     fecha = fecha,
     referenciaTipo = referenciaTipo
 )
+
+fun BitacoraDto.toDomain(): BitacoraMovimiento = BitacoraMovimiento(
+    id = id,
+    tipo = tipo,
+    insumoNombre = insumoNombre,
+    unidadMedida = unidadMedida,
+    cantidad = cantidad,
+    existenciaAnterior = existenciaAnterior,
+    existenciaNueva = existenciaNueva,
+    usuarioNombre = usuarioNombre,
+    fecha = fecha,
+    referenciaTipo = referenciaTipo
+)
