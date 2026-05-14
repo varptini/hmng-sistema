@@ -38,9 +38,9 @@ class PedidoSubalmacenRepositoryImpl @Inject constructor(
                 }
             }
         } catch (_: IOException) {
-            // Offline - Room data is served above
+            // Offline — Room data is served above
         } catch (_: Exception) {
-            // Other network errors - Room data is served above
+            // Other network errors — Room data is served above
         }
     }
 
