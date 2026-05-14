@@ -6,6 +6,8 @@ import mx.hmng.app.data.dto.InsumoDto
 import mx.hmng.app.data.dto.NotificacionDto
 import mx.hmng.app.data.dto.PedidoAlmacenDto
 import mx.hmng.app.data.dto.PedidoSubalmacenDto
+import mx.hmng.app.data.dto.InsumoInventarioDto
+import mx.hmng.app.data.dto.MovimientoDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -49,6 +51,20 @@ interface HmngApiService {
     // --- Notificaciones ---
     @GET("notificaciones")
     suspend fun getNotificaciones(): Response<List<NotificacionDto>>
+
+    @PUT("notificaciones/leidas")
+    suspend fun marcarNotificacionesLeidas(@Body payload: Map<String, Any>): Response<Void>
+
+    // --- Reportes ---
+    @GET("reportes/inventario")
+    suspend fun getInventario(): Response<List<InsumoInventarioDto>>
+
+    @GET("reportes/movimientos")
+    suspend fun getMovimientos(
+        @Query("desde") desde: String? = null,
+        @Query("hasta") hasta: String? = null,
+        @Query("tipo") tipo: String? = null
+    ): Response<List<MovimientoDto>>
 
     // --- Pedidos Subalmacén ---
     @GET("pedidos-subalmacen")

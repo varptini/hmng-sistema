@@ -22,6 +22,9 @@ interface NotificacionDao {
     @Query("UPDATE notificaciones SET leida=1")
     suspend fun markAllRead()
 
+    @Query("UPDATE notificaciones SET leida=1 WHERE id IN (:ids)")
+    suspend fun markReadByIds(ids: List<Int>)
+
     @Query("DELETE FROM notificaciones WHERE created_at < :before")
     suspend fun clearOld(before: String)
 }

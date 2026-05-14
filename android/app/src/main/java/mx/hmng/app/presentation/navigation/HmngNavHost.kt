@@ -5,31 +5,52 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import mx.hmng.app.data.session.SessionManager
 import mx.hmng.app.presentation.bitacora.BitacoraScreen
 import mx.hmng.app.presentation.components.AppScaffold
 import mx.hmng.app.presentation.dashboard.DashboardScreen
 import mx.hmng.app.presentation.insumos.AlertasScreen
 import mx.hmng.app.presentation.insumos.InsumosScreen
+import mx.hmng.app.presentation.notificaciones.NotificacionesScreen
+import mx.hmng.app.presentation.notificaciones.NotificacionesViewModel
 import mx.hmng.app.presentation.pedidos.PedidosAlmacenScreen
 import mx.hmng.app.presentation.pedidos.PedidosSubalmacenScreen
+import mx.hmng.app.presentation.reportes.ReportesScreen
 
 @Composable
-fun HmngNavHost() {
+fun HmngNavHost(sessionManager: SessionManager) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: NavRoutes.Login.route
 
+    val userRole = sessionManager.getUser()?.rol ?: ""
+    val startDestination = if (sessionManager.isLoggedIn) NavRoutes.Dashboard.route else NavRoutes.Login.route
+
+    // Shared NotificacionesViewModel scoped to this composition (Activity lifecycle)
+    val notifViewModel: NotificacionesViewModel = hiltViewModel()
+    val unreadCount by notifViewModel.unreadCount.collectAsStateWithLifecycle()
+
     AppScaffold(
         navController = navController,
-        currentRoute = currentRoute
+        currentRoute = currentRoute,
+        notificationCount = unreadCount,
+        userRole = userRole,
+        onLogout = {
+            sessionManager.clearSession()
+            navController.navigate(NavRoutes.Login.route) {
+                popUpTo(0) { inclusive = true }
+            }
+        }
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = NavRoutes.Login.route,
+            startDestination = startDestination,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(NavRoutes.Login.route) {
@@ -57,10 +78,10 @@ fun HmngNavHost() {
                 BitacoraScreen()
             }
             composable(NavRoutes.Notificaciones.route) {
-                Text("Pantalla Notificaciones")
+                NotificacionesScreen(viewModel = notifViewModel)
             }
             composable(NavRoutes.Reportes.route) {
-                Text("Pantalla Reportes")
+                ReportesScreen()
             }
         }
     }

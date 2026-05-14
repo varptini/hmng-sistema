@@ -51,6 +51,7 @@ fun AppScaffold(
     navController: NavHostController,
     currentRoute: String,
     notificationCount: Int = 0,
+    userRole: String = "",
     onLogout: () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -132,6 +133,8 @@ fun AppScaffold(
                     BottomNavBar(
                         navController = navController,
                         currentRoute = currentRoute,
+                        userRole = userRole,
+                        unreadCount = notificationCount,
                         onMoreClick = { scope.launch { drawerState.open() } }
                     )
                 },
