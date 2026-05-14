@@ -7,8 +7,10 @@ import mx.hmng.app.data.dto.NotificacionDto
 import mx.hmng.app.data.dto.PedidoSubalmacenDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface HmngApiService {
@@ -42,4 +44,13 @@ interface HmngApiService {
         @Path("id") insumoId: Int,
         @Body payload: Map<String, Any>
     ): Response<InsumoDto>
+
+    @POST("insumos")
+    suspend fun createInsumo(@Body payload: Map<String, Any>): Response<InsumoDto>
+
+    @PUT("insumos/{id}")
+    suspend fun updateInsumo(@Path("id") id: Int, @Body payload: Map<String, Any>): Response<InsumoDto>
+
+    @DELETE("insumos/{id}")
+    suspend fun deleteInsumo(@Path("id") id: Int): Response<Void>
 }

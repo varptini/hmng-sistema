@@ -25,6 +25,12 @@ interface InsumoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(insumos: List<InsumoEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(insumo: InsumoEntity)
+
+    @Query("DELETE FROM insumos WHERE id=:id")
+    suspend fun deleteById(id: Int)
+
     @Query("DELETE FROM insumos")
     suspend fun clearAll()
 }

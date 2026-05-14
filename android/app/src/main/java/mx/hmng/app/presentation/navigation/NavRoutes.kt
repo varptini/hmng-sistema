@@ -10,4 +10,5 @@ sealed class NavRoutes(val route: String) {
     object Bitacora : NavRoutes("bitacora")
     object Notificaciones : NavRoutes("notificaciones")
     object Reportes : NavRoutes("reportes")
+    object Alertas : NavRoutes("alertas")
 }
