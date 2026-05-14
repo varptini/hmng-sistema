@@ -2,20 +2,29 @@ package mx.hmng.app.presentation.navigation
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import mx.hmng.app.presentation.auth.LoginScreen
 
 @Composable
-fun HmngNavHost() {
+fun HmngNavHost(navViewModel: NavViewModel = hiltViewModel()) {
     val navController = rememberNavController()
+    val startDestination = navViewModel.startDestination
 
     NavHost(
         navController = navController,
-        startDestination = NavRoutes.Login.route
+        startDestination = startDestination
     ) {
         composable(NavRoutes.Login.route) {
-            Text("Pantalla Login")
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(NavRoutes.Dashboard.route) {
+                        popUpTo(NavRoutes.Login.route) { inclusive = true }
+                    }
+                }
+            )
         }
         composable(NavRoutes.Dashboard.route) {
             Text("Pantalla Dashboard")
