@@ -86,7 +86,7 @@ const create = async (req, res, next) => {
       const { insumo_id, cantidad } = item;
 
       if (!insumo_id || !cantidad || cantidad <= 0) {
-        throw new Error('Cada detalle requiere insumo_id y cantidad positiva');
+        throw Object.assign(new Error('Cada detalle requiere insumo_id y cantidad positiva'), { status: 400 });
       }
 
       const insumoActual = await client.query(
@@ -95,7 +95,7 @@ const create = async (req, res, next) => {
       );
 
       if (!insumoActual.rows.length) {
-        throw new Error(`Insumo ${insumo_id} no encontrado`);
+        throw Object.assign(new Error(`Insumo ${insumo_id} no encontrado`), { status: 400 });
       }
 
       const { existencia, cantidad_minima, nombre, unidad_medida } = insumoActual.rows[0];
@@ -103,7 +103,7 @@ const create = async (req, res, next) => {
       const cantidadSolicitada = parseFloat(cantidad);
 
       if (existenciaAnterior < cantidadSolicitada) {
-        throw new Error(`Stock insuficiente para: ${nombre} (disponible: ${existenciaAnterior})`);
+        throw Object.assign(new Error(`Stock insuficiente para: ${nombre} (disponible: ${existenciaAnterior})`), { status: 400 });
       }
 
       const existenciaNueva = existenciaAnterior - cantidadSolicitada;
