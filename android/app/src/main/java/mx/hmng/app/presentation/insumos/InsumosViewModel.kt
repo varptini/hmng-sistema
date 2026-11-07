@@ -54,7 +54,30 @@ class InsumosViewModel @Inject constructor(
         _selectedAlerta.value = alerta
     }
 
+    private val _snackbarMessage = MutableStateFlow<String?>(null)
+    val snackbarMessage: StateFlow<String?> = _snackbarMessage.asStateFlow()
+
     fun deleteInsumo(id: Int) {
         viewModelScope.launch { repo.deleteInsumo(id) }
+    }
+
+    fun createInsumo(payload: Map<String, Any>) {
+        viewModelScope.launch {
+            repo.createInsumo(payload)
+                .onSuccess { _snackbarMessage.value = "Insumo creado correctamente" }
+                .onFailure { e -> _snackbarMessage.value = "Error: ${e.message}" }
+        }
+    }
+
+    fun updateInsumo(id: Int, payload: Map<String, Any>) {
+        viewModelScope.launch {
+            repo.updateInsumo(id, payload)
+                .onSuccess { _snackbarMessage.value = "Insumo actualizado correctamente" }
+                .onFailure { e -> _snackbarMessage.value = "Error: ${e.message}" }
+        }
+    }
+
+    fun clearSnackbar() {
+        _snackbarMessage.value = null
     }
 }

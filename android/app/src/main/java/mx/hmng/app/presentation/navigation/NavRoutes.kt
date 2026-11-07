@@ -11,4 +11,9 @@ sealed class NavRoutes(val route: String) {
     object Notificaciones : NavRoutes("notificaciones")
     object Reportes : NavRoutes("reportes")
     object Alertas : NavRoutes("alertas")
+    object Salidas : NavRoutes("salidas")
+    object Servicios : NavRoutes("servicios")
+    object Empleados : NavRoutes("empleados")
+    object Usuarios : NavRoutes("usuarios")
+    object Roles : NavRoutes("roles")
 }

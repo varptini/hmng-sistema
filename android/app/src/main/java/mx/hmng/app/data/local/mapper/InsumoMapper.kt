@@ -14,8 +14,12 @@ fun InsumoDto.toEntity(): InsumoEntity = InsumoEntity(
     lote = lote,
     fechaCaducidad = fechaCaducidad,
     codigoBarras = codigoBarras,
-    estadoCaducidad = estadoCaducidad,
-    estadoStock = estadoStock,
+    // El backend envía estado_caducidad/estado_stock en minúsculas (p. ej. "por_caducar"),
+    // mientras que el resto de la app (AlertBadge, InsumoCard, Insumo.estaCaducado) compara
+    // contra constantes en mayúsculas ("POR_CADUCAR"). Normalizamos aquí, en el único punto
+    // de entrada de datos del backend hacia Room/dominio.
+    estadoCaducidad = estadoCaducidad.uppercase(),
+    estadoStock = estadoStock.uppercase(),
     activo = activo,
     updatedAt = updatedAt
 )

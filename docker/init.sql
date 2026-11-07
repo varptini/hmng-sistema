@@ -324,8 +324,8 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Triggers de updated_at
-CREATE TRIGGER update_insumos_updated_at BEFORE UPDATE ON insumos FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_usuarios_updated_at BEFORE UPDATE ON usuarios FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_pedidos_subalmacen_updated_at BEFORE UPDATE ON pedidos_subalmacen FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_pedidos_almacen_updated_at BEFORE UPDATE ON pedidos_almacen_general FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+-- Triggers de updated_at (CREATE OR REPLACE: re-ejecutable por docker-entrypoint-initdb.d y por db:migrate)
+CREATE OR REPLACE TRIGGER update_insumos_updated_at BEFORE UPDATE ON insumos FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE OR REPLACE TRIGGER update_usuarios_updated_at BEFORE UPDATE ON usuarios FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE OR REPLACE TRIGGER update_pedidos_subalmacen_updated_at BEFORE UPDATE ON pedidos_subalmacen FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE OR REPLACE TRIGGER update_pedidos_almacen_updated_at BEFORE UPDATE ON pedidos_almacen_general FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

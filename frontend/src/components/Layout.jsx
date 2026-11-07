@@ -4,8 +4,8 @@ import { useAuthStore } from '../store/authStore'
 import api from '../lib/api'
 import { io } from 'socket.io-client'
 import {
-  LayoutDashboard, Package, TrendingUp, ShoppingCart, Warehouse,
-  Users, UserCheck, Building2, ClipboardList, LogOut, Bell,
+  LayoutDashboard, Package, TrendingUp, TrendingDown, ShoppingCart, Warehouse,
+  Users, UserCheck, Building2, ClipboardList, LogOut, Bell, Shield, FileBarChart,
   Menu, X, ChevronRight, AlertTriangle
 } from 'lucide-react'
 import { cn } from '../lib/utils'
@@ -14,12 +14,15 @@ const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', end: true, roles: null },
   { to: '/insumos', icon: Package, label: 'Insumos', roles: null },
   { to: '/entradas', icon: TrendingUp, label: 'Entradas', roles: ['Administrador','Abastecedor'] },
+  { to: '/salidas', icon: TrendingDown, label: 'Salidas', roles: ['Administrador','Suministrador'] },
   { to: '/pedidos/subalmacen', icon: ShoppingCart, label: 'Pedidos Sub-Almacén', roles: null },
   { to: '/pedidos/almacen', icon: Warehouse, label: 'Pedidos Almacén Gral.', roles: ['Administrador','Abastecedor'] },
   { to: '/bitacora', icon: ClipboardList, label: 'Bitácora', roles: null },
+  { to: '/reportes', icon: FileBarChart, label: 'Reportes', roles: null },
   { to: '/servicios', icon: Building2, label: 'Servicios', roles: ['Administrador'] },
   { to: '/empleados', icon: UserCheck, label: 'Empleados', roles: ['Administrador'] },
   { to: '/usuarios', icon: Users, label: 'Usuarios', roles: ['Administrador'] },
+  { to: '/roles', icon: Shield, label: 'Roles', roles: ['Administrador'] },
 ]
 
 export default function Layout() {
@@ -144,10 +147,9 @@ export default function Layout() {
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => {
-                api.put('/notificaciones/marcar-leidas').then(() => setNotifCount(0))
-              }}
+              onClick={() => navigate('/notificaciones')}
               className="relative p-2 rounded-lg hover:bg-muted transition-colors"
+              title="Ver notificaciones"
             >
               <Bell size={18} />
               {notifCount > 0 && (
