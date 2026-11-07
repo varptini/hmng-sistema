@@ -5,12 +5,16 @@ import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import InsumosPage from './pages/InsumosPage'
 import EntradasPage from './pages/EntradasPage'
+import SalidasPage from './pages/SalidasPage'
 import PedidosSubalmacenPage from './pages/PedidosSubalmacenPage'
 import PedidosAlmacenPage from './pages/PedidosAlmacenPage'
 import UsuariosPage from './pages/UsuariosPage'
 import EmpleadosPage from './pages/EmpleadosPage'
 import ServiciosPage from './pages/ServiciosPage'
+import RolesPage from './pages/RolesPage'
 import BitacoraPage from './pages/BitacoraPage'
+import ReportesPage from './pages/ReportesPage'
+import NotificacionesPage from './pages/NotificacionesPage'
 import { Toaster } from './components/ui/toaster'
 
 function ProtectedRoute({ children, roles }) {
@@ -35,6 +39,11 @@ export default function App() {
               <EntradasPage />
             </ProtectedRoute>
           } />
+          <Route path="salidas" element={
+            <ProtectedRoute roles={['Administrador','Suministrador']}>
+              <SalidasPage />
+            </ProtectedRoute>
+          } />
           <Route path="pedidos/subalmacen" element={<PedidosSubalmacenPage />} />
           <Route path="pedidos/almacen" element={
             <ProtectedRoute roles={['Administrador','Abastecedor']}>
@@ -56,7 +65,14 @@ export default function App() {
               <ServiciosPage />
             </ProtectedRoute>
           } />
+          <Route path="roles" element={
+            <ProtectedRoute roles={['Administrador']}>
+              <RolesPage />
+            </ProtectedRoute>
+          } />
           <Route path="bitacora" element={<BitacoraPage />} />
+          <Route path="reportes" element={<ReportesPage />} />
+          <Route path="notificaciones" element={<NotificacionesPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
