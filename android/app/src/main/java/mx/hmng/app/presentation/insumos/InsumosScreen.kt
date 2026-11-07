@@ -19,12 +19,15 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,6 +62,15 @@ fun InsumosScreen(
     val uiState by viewModel.insumos.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val selectedAlerta by viewModel.selectedAlerta.collectAsStateWithLifecycle()
+    val snackbarMessage by viewModel.snackbarMessage.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(snackbarMessage) {
+        snackbarMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearSnackbar()
+        }
+    }
 
     var showFormDialog by remember { mutableStateOf(false) }
     var editingInsumo by remember { mutableStateOf<Insumo?>(null) }
@@ -147,6 +159,11 @@ fun InsumosScreen(
                 Icon(Icons.Default.Add, contentDescription = "Nuevo insumo")
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 
     if (showFormDialog) {
@@ -155,7 +172,12 @@ fun InsumosScreen(
             onDismiss = { showFormDialog = false },
             onSave = { payload ->
                 showFormDialog = false
-                // TODO: wire create/update via viewmodel in phase 6
+                val editing = editingInsumo
+                if (editing == null) {
+                    viewModel.createInsumo(payload)
+                } else {
+                    viewModel.updateInsumo(editing.id, payload)
+                }
             }
         )
     }

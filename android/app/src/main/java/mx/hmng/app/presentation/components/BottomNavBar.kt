@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
+import mx.hmng.app.domain.model.Roles
 import mx.hmng.app.presentation.navigation.NavRoutes
 
 private data class NavItem(
@@ -35,9 +36,11 @@ fun BottomNavBar(
     unreadCount: Int = 0,
     onMoreClick: () -> Unit
 ) {
-    val pedidosRoute = when (userRole.uppercase()) {
-        "SUBALMACEN" -> NavRoutes.PedidosSubalmacen.route
-        else -> NavRoutes.PedidosAlmacen.route
+    // Pedidos Almacén General solo aplica a Administrador/Abastecedor (igual que la web);
+    // el resto de roles trabaja con pedidos de sub-almacén.
+    val pedidosRoute = when (userRole) {
+        Roles.ADMINISTRADOR, Roles.ABASTECEDOR -> NavRoutes.PedidosAlmacen.route
+        else -> NavRoutes.PedidosSubalmacen.route
     }
 
     val items = buildList {
@@ -46,7 +49,7 @@ fun BottomNavBar(
         add(NavItem(pedidosRoute, "Pedidos", Icons.Default.ShoppingCart))
         add(NavItem(NavRoutes.Bitacora.route, "Bitácora", Icons.Default.History))
         add(NavItem(NavRoutes.Notificaciones.route, "Avisos", Icons.Default.Notifications, badgeCount = unreadCount))
-        if (userRole.uppercase() in listOf("ADMIN", "ALMACENISTA", "ALMACEN")) {
+        if (userRole in listOf(Roles.ADMINISTRADOR, Roles.ABASTECEDOR)) {
             add(NavItem(NavRoutes.Reportes.route, "Reportes", Icons.Default.BarChart))
         } else {
             add(NavItem("more", "Más", Icons.Default.MoreHoriz))

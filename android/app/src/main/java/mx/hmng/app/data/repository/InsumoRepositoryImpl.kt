@@ -6,6 +6,7 @@ import mx.hmng.app.data.local.dao.InsumoDao
 import mx.hmng.app.data.local.mapper.toDomain
 import mx.hmng.app.data.local.mapper.toEntity
 import mx.hmng.app.data.remote.api.HmngApiService
+import mx.hmng.app.data.remote.bodyOrThrow
 import mx.hmng.app.domain.model.Insumo
 import mx.hmng.app.domain.repository.InsumoRepository
 import javax.inject.Inject
@@ -51,14 +52,14 @@ class InsumoRepositoryImpl @Inject constructor(
 
     override suspend fun createInsumo(payload: Map<String, Any>): Result<Insumo> = runCatching {
         val response = api.createInsumo(payload)
-        val dto = response.body() ?: error("Respuesta vacía")
+        val dto = response.bodyOrThrow()
         dao.upsert(dto.toEntity())
         dto.toEntity().toDomain()
     }
 
     override suspend fun updateInsumo(id: Int, payload: Map<String, Any>): Result<Insumo> = runCatching {
         val response = api.updateInsumo(id, payload)
-        val dto = response.body() ?: error("Respuesta vacía")
+        val dto = response.bodyOrThrow()
         dao.upsert(dto.toEntity())
         dto.toEntity().toDomain()
     }
