@@ -12,6 +12,7 @@ import mx.hmng.app.data.dto.ServicioDto
 import mx.hmng.app.data.dto.UsuarioSistemaDto
 import mx.hmng.app.data.dto.DashboardDto
 import mx.hmng.app.data.dto.InsumoDto
+import mx.hmng.app.data.dto.InsumosPageDto
 import mx.hmng.app.data.dto.NotificacionDto
 import mx.hmng.app.data.dto.PedidoAlmacenDto
 import mx.hmng.app.data.dto.PedidoSubalmacenDto
@@ -33,8 +34,12 @@ interface HmngApiService {
     suspend fun login(@Body payload: Map<String, String>): Response<LoginResponseDto>
 
     // --- Insumos ---
+    // GET /insumos devuelve { data, total, page, limit }, no un array plano.
     @GET("insumos")
-    suspend fun getInsumos(): Response<List<InsumoDto>>
+    suspend fun getInsumos(
+        @Query("page") page: Int? = null,
+        @Query("limit") limit: Int? = null
+    ): Response<InsumosPageDto>
 
     @POST("insumos")
     suspend fun createInsumo(@Body payload: Map<String, Any>): Response<InsumoDto>

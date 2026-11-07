@@ -9,13 +9,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import mx.hmng.app.core.util.UiState
 import mx.hmng.app.core.util.userMessage
+import mx.hmng.app.data.socket.SocketManager
 import mx.hmng.app.domain.model.Usuario
 import mx.hmng.app.domain.repository.AuthRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val socketManager: SocketManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState<Usuario>())
@@ -30,7 +32,10 @@ class LoginViewModel @Inject constructor(
         _uiState.value = UiState(isLoading = true)
         viewModelScope.launch {
             authRepository.login(usuario.trim(), contrasena)
-                .onSuccess { _uiState.value = UiState(data = it) }
+                .onSuccess {
+                    socketManager.connect()
+                    _uiState.value = UiState(data = it)
+                }
                 .onFailure { e ->
                     _uiState.value = UiState(error = e.userMessage("No se pudo iniciar sesión"))
                 }

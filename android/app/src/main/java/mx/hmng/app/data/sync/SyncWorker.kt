@@ -51,9 +51,9 @@ class SyncWorker @AssistedInject constructor(
     }
 
     private suspend fun refreshInsumos() {
-        val response = apiService.getInsumos()
+        val response = apiService.getInsumos(limit = 200)
         if (response.isSuccessful) {
-            val entities = response.body()?.map { it.toEntity() } ?: return
+            val entities = response.body()?.data?.map { it.toEntity() } ?: return
             insumoDao.upsertAll(entities)
         }
     }
