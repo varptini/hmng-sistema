@@ -104,12 +104,10 @@ class SyncWorker @AssistedInject constructor(
                     apiService.createPedido(body).isSuccessful
                 }
                 OP_CREATE_ENTRADA -> {
-                    val insumoId = (body["insumo_id"] as? Double)?.toInt() ?: return false
-                    apiService.createEntrada(insumoId, body).isSuccessful
+                    apiService.createEntradaGeneral(body).isSuccessful
                 }
                 OP_CREATE_SALIDA -> {
-                    val insumoId = (body["insumo_id"] as? Double)?.toInt() ?: return false
-                    apiService.createSalida(insumoId, body).isSuccessful
+                    apiService.createSalidaGeneral(body).isSuccessful
                 }
                 else -> true
             }
