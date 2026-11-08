@@ -51,10 +51,17 @@ class SyncWorker @AssistedInject constructor(
     }
 
     private suspend fun refreshInsumos() {
-        val response = apiService.getInsumos(limit = 200)
-        if (response.isSuccessful) {
-            val entities = response.body()?.data?.map { it.toEntity() } ?: return
-            insumoDao.upsertAll(entities)
+        var page = 1
+        var fetched = 0
+        while (true) {
+            val response = apiService.getInsumos(page = page, limit = INSUMOS_PAGE_SIZE)
+            if (!response.isSuccessful) return
+            val body = response.body() ?: return
+            if (body.data.isEmpty()) return
+            insumoDao.upsertAll(body.data.map { it.toEntity() })
+            fetched += body.data.size
+            if (fetched >= body.total) return
+            page++
         }
     }
 
@@ -119,6 +126,7 @@ class SyncWorker @AssistedInject constructor(
     companion object {
         private const val MAX_RETRIES = 3
         private const val MAX_OP_RETRIES = 5
+        private const val INSUMOS_PAGE_SIZE = 100
         private const val WORK_NAME = "HmngSyncWorker"
 
         const val OP_CREATE_PEDIDO = "CREATE_PEDIDO"
